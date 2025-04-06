@@ -6,11 +6,14 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import dev.rmmarquini.hyperativa.challenge.provider.JwtProvider;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletResponse;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.mock.web.MockFilterChain;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -27,6 +30,8 @@ import static org.mockito.Mockito.*;
 
 public class JwtAuthenticationFilterTest {
 
+	private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilterTest.class);
+
 	@InjectMocks
 	private JwtAuthenticationFilter filter;
 
@@ -39,16 +44,27 @@ public class JwtAuthenticationFilterTest {
 	public void setUp() throws Exception {
 		MockitoAnnotations.openMocks(this);
 		SecurityContextHolder.clearContext();
+		logger.info(new String(new char[25]).replace("\0", "-"));
+	}
+
+	@AfterAll
+	public static void tearDown() {
+		SecurityContextHolder.clearContext();
+		logger.info(new String(new char[25]).replace("\0", "-"));
 	}
 
 	@Test
 	public void testValidToken() throws ServletException, IOException {
+
+		logger.info("Testing valid token");
+
+		String username = "cliente1";
 		LocalDateTime now = LocalDateTime.now();
 		Instant issuedAt = now.atZone(ZoneId.systemDefault()).toInstant();
 		Instant expiresAt = now.plus(Duration.ofHours(1)).atZone(ZoneId.systemDefault()).toInstant();
 
 		String token = JWT.create()
-				.withSubject("test-user")
+				.withSubject(username)
 				.withIssuedAt(issuedAt)
 				.withExpiresAt(expiresAt)
 				.sign(Algorithm.HMAC512(SECRET));
@@ -64,12 +80,16 @@ public class JwtAuthenticationFilterTest {
 		filter.doFilter(request, response, chain);
 
 		assertNotNull(SecurityContextHolder.getContext().getAuthentication());
-		assertEquals("test-user", SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+		assertEquals(username, SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 		assertEquals(HttpServletResponse.SC_OK, response.getStatus());
+
 	}
 
 	@Test
 	public void testInvalidToken() throws ServletException, IOException {
+
+		logger.info("Testing invalid token");
+
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.addHeader("Authorization", "Bearer invalid-token");
 		MockHttpServletResponse response = new MockHttpServletResponse();
@@ -77,29 +97,29 @@ public class JwtAuthenticationFilterTest {
 
 		when(jwtProvider.validateToken("Bearer invalid-token")).thenReturn(null);
 
-		// Executa o filtro
 		filter.doFilter(request, response, chain);
 
-		// Verifica o resultado
 		assertNull(SecurityContextHolder.getContext().getAuthentication());
 		assertEquals(HttpServletResponse.SC_UNAUTHORIZED, response.getStatus());
 		assertEquals("Invalid JWT token.", response.getContentAsString());
+
 	}
 
 	@Test
 	public void testNoToken() throws ServletException, IOException {
-		// Configura a requisição sem token
+
+		logger.info("Testing no token");
+
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		MockHttpServletResponse response = new MockHttpServletResponse();
 		MockFilterChain chain = new MockFilterChain();
 
-		// Executa o filtro
 		filter.doFilter(request, response, chain);
 
-		// Verifica o resultado
 		assertNull(SecurityContextHolder.getContext().getAuthentication());
 		assertEquals(HttpServletResponse.SC_UNAUTHORIZED, response.getStatus());
 		assertEquals("Missing or invalid Authorization header.", response.getContentAsString());
+
 	}
 
 }
