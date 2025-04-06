@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>dev.rmmarquini</groupId>
-    <artifactId>desafio-hyperativa</artifactId>
+    <artifactId>hyperativa-challenge</artifactId>
     <version>0.0.1</version>
-    <name>desafio-hyperativa</name>
-    <description>desafio-hyperativa</description>
+    <name>hyperativa-challenge</name>
+    <description>An API to save and query data related with customer's credit card following PCI's data security standards</description>
     <url/>
     <licenses>
         <license/>

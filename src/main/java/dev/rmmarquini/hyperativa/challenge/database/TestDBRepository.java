@@ -1,4 +1,4 @@
-package dev.rmmarquini.hyperativa.desafio.database;
+package dev.rmmarquini.hyperativa.challenge.database;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
