@@ -24,5 +24,6 @@ public class CardEntity {
 	private String lineIdentifier; // Line identifier (e.g., "C")
 	private String batchSequenceNumber; // Sequence number in batch (e.g., 2)
 	private String encryptedCardNumber; // AES-256 fully encrypted card number (e.g., "4456897999999999")
+	private String cardNumberHash; // SHA-256 hash of the card number (e.g., "4456897999999999")
 
 }

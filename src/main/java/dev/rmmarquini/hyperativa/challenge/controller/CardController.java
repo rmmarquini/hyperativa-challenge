@@ -55,7 +55,7 @@ public class CardController {
 
 	@PostMapping
 	public ResponseEntity<CardResponseDTO> createCard(@RequestBody CardRequestDTO cardRequestDTO) {
-		logger.info("Request to save the received card: {}", cardRequestDTO);
+		logger.info("Request to save the received card: {}", StringUtils.maskCardNumber(cardRequestDTO.cardNumber()));
 		CardEntity cardEntity = cardService.saveCard(
 				cardRequestDTO.batchDescription(),
 				cardRequestDTO.batchDate(),

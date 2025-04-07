@@ -37,6 +37,7 @@ public class CardService {
 				.lineIdentifier(lineIdentifier)
 				.batchSequenceNumber(batchSequenceNumber)
 				.encryptedCardNumber(encryptionService.encrypt(trimmedCardNumber))
+				.cardNumberHash(StringUtils.hashCardNumber(trimmedCardNumber))
 				.build();
 
 		logger.debug("Encrypted card number during save: {}", newCardEntity.getEncryptedCardNumber());
@@ -53,13 +54,14 @@ public class CardService {
 			return Optional.empty();
 		}
 		String trimmedCardNumber = cardNumber.trim();
-		String encryptedCardNumber = encryptionService.encrypt(trimmedCardNumber);
-		logger.debug("Encrypted card number during search: {}", encryptedCardNumber);
-		Optional<CardEntity> cardEntity = cardRepository.findByEncryptedCardNumber(encryptedCardNumber);
+		logger.debug("Raw card number during search: '{}'", trimmedCardNumber);
+		String cardNumberHash = StringUtils.hashCardNumber(trimmedCardNumber);
+		logger.debug("Hashed card number during search: {}", cardNumberHash);
+		Optional<CardEntity> cardEntity = cardRepository.findByCardNumberHash(cardNumberHash);
 		if (cardEntity.isPresent()) {
 			logger.debug("Found card with encrypted number: {}", cardEntity.get().getEncryptedCardNumber());
 		} else {
-			logger.debug("No card found for encrypted number: {}", encryptedCardNumber);
+			logger.debug("No card found for hash: {}", cardNumberHash);
 		}
 		return cardEntity;
 	}

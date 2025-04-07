@@ -3,6 +3,7 @@ package dev.rmmarquini.hyperativa.challenge.config;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.jasypt.encryption.StringEncryptor;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
+import org.jasypt.iv.RandomIvGenerator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +23,8 @@ public class JasyptConfig {
 		encryptor.setProviderName("BC");
 		encryptor.setPassword(encryptorPassword);
 		encryptor.setAlgorithm("PBEWithSHA256And256BitAES-CBC-BC");
+		encryptor.setIvGenerator(new RandomIvGenerator());
 		return encryptor;
 	}
+
 }
