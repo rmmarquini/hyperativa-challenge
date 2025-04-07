@@ -46,7 +46,7 @@ public class CardController {
 		);
 		logger.info("Card saved successfully: {}", cardResponseDTO);
 
-		return ResponseEntity.created(URI.create("/cards")).body(cardResponseDTO);
+		return ResponseEntity.created(URI.create("/cards/".concat(cardResponseDTO.getId()))).body(cardResponseDTO);
 
 	}
 
