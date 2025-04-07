@@ -41,7 +41,7 @@ public class JwtAuthenticationFilterTest {
 	private static final String SECRET = "hyperativa-challenge";
 
 	@BeforeEach
-	public void setUp() throws Exception {
+	public void setUp() {
 		MockitoAnnotations.openMocks(this);
 		SecurityContextHolder.clearContext();
 		logger.info(new String(new char[25]).replace("\0", "-"));
