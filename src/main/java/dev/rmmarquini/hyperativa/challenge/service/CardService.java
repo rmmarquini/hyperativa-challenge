@@ -25,7 +25,7 @@ public class CardService {
 	private EncryptionService encryptionService;
 
 	public CardEntity saveCard(String batchDescription, String batchDate, String batchNumber,
-	                           String lineIdentifier, int batchSequenceNumber, String cardNumber) {
+	                           String lineIdentifier, String batchSequenceNumber, String cardNumber) {
 
 		logger.info("Saving card with masked number: {}", StringUtils.maskCardNumber(cardNumber));
 

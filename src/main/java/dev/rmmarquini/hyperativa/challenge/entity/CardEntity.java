@@ -22,7 +22,7 @@ public class CardEntity {
 	private LocalDate batchDate; // Batch date (e.g., "20180524")
 	private String batchNumber; // Batch number (e.g., "0001")
 	private String lineIdentifier; // Line identifier (e.g., "C")
-	private int batchSequenceNumber; // Sequence number in batch (e.g., 2)
+	private String batchSequenceNumber; // Sequence number in batch (e.g., 2)
 	private String encryptedCardNumber; // AES-256 fully encrypted card number (e.g., "4456897999999999")
 
 }
