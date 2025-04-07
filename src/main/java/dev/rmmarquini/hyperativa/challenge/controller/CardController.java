@@ -20,6 +20,7 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/cards")
@@ -32,6 +33,25 @@ public class CardController {
 
 	@Autowired
 	private EncryptionService encryptionService;
+
+	@GetMapping("/{cardNumber}")
+	public ResponseEntity<CardResponseDTO> getCardByNumber(@PathVariable("cardNumber") String cardNumber) {
+		logger.info("Searching card with number: {}", StringUtils.maskCardNumber(cardNumber));
+		Optional<CardEntity> cardEntityOptional = cardService.findByCardNumber(cardNumber);
+
+		if (cardEntityOptional.isEmpty()) {
+			logger.info("Card with number {} not found", StringUtils.maskCardNumber(cardNumber));
+			return ResponseEntity.notFound().build();
+		}
+
+		CardEntity cardEntity = cardEntityOptional.get();
+		CardResponseDTO response = new CardResponseDTO(
+				cardEntity.getId(),
+				StringUtils.maskCardNumber(encryptionService.decrypt(cardEntity.getEncryptedCardNumber()))
+		);
+		logger.info("Card retrieved successfully: {}", response);
+		return ResponseEntity.ok(response);
+	}
 
 	@PostMapping
 	public ResponseEntity<CardResponseDTO> createCard(@RequestBody CardRequestDTO cardRequestDTO) {
