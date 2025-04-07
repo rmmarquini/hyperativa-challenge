@@ -27,7 +27,8 @@ public class CardService {
 	public CardEntity saveCard(String batchDescription, String batchDate, String batchNumber,
 	                           String lineIdentifier, String batchSequenceNumber, String cardNumber) {
 
-		logger.info("Saving card with masked number: {}", StringUtils.maskCardNumber(cardNumber));
+		String trimmedCardNumber = cardNumber.trim();
+		logger.info("Saving card number: {}", StringUtils.maskCardNumber(trimmedCardNumber));
 
 		CardEntity newCardEntity = CardEntity.builder()
 				.batchDescription(batchDescription)
@@ -35,8 +36,10 @@ public class CardService {
 				.batchNumber(batchNumber)
 				.lineIdentifier(lineIdentifier)
 				.batchSequenceNumber(batchSequenceNumber)
-				.encryptedCardNumber(encryptionService.encrypt(cardNumber))
+				.encryptedCardNumber(encryptionService.encrypt(trimmedCardNumber))
 				.build();
+
+		logger.debug("Encrypted card number during save: {}", newCardEntity.getEncryptedCardNumber());
 
 		CardEntity savedCardEntity = cardRepository.save(newCardEntity);
 		logger.info("Card saved with ID: {}", savedCardEntity.getId());
@@ -45,9 +48,20 @@ public class CardService {
 	}
 
 	public Optional<CardEntity> findByCardNumber(String cardNumber) {
-		logger.info("Finding card with masked number: {}", StringUtils.maskCardNumber(cardNumber));
-		String encryptedCardNumber = encryptionService.encrypt(cardNumber);
-		return cardRepository.findByEncryptedCardNumber(encryptedCardNumber);
+		if (cardNumber == null || cardNumber.trim().isEmpty()) {
+			logger.error("Card number to search is null or empty");
+			return Optional.empty();
+		}
+		String trimmedCardNumber = cardNumber.trim();
+		String encryptedCardNumber = encryptionService.encrypt(trimmedCardNumber);
+		logger.debug("Encrypted card number during search: {}", encryptedCardNumber);
+		Optional<CardEntity> cardEntity = cardRepository.findByEncryptedCardNumber(encryptedCardNumber);
+		if (cardEntity.isPresent()) {
+			logger.debug("Found card with encrypted number: {}", cardEntity.get().getEncryptedCardNumber());
+		} else {
+			logger.debug("No card found for encrypted number: {}", encryptedCardNumber);
+		}
+		return cardEntity;
 	}
 
 }
