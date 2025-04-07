@@ -12,7 +12,7 @@
     <artifactId>hyperativa-challenge</artifactId>
     <version>0.0.1</version>
     <name>hyperativa-challenge</name>
-    <description>An API to save and query data related with customer's credit card following PCI's data security standards</description>
+    <description>An API to save and query data related with customer's credit cardEntity following PCI's data security standards</description>
     <url/>
     <licenses>
         <license/>
@@ -72,6 +72,11 @@
             <groupId>com.auth0</groupId>
             <artifactId>java-jwt</artifactId>
             <version>4.5.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.ulisesbocchio</groupId>
+            <artifactId>jasypt-spring-boot-starter</artifactId>
+            <version>3.0.5</version>
         </dependency>
     </dependencies>
 

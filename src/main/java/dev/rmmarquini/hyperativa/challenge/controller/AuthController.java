@@ -31,7 +31,7 @@ public class AuthController {
 				.withSubject(username)
 				.withIssuedAt(issuedAt)
 				.withExpiresAt(expiresAt)
-				.sign(Algorithm.HMAC256(secret));
+				.sign(Algorithm.HMAC512(secret));
 	}
 
 }
