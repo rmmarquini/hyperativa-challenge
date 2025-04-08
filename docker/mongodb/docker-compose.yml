@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: hyperativa-mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: appdev
+      MONGO_INITDB_ROOT_PASSWORD: asdasdasd
+      MONGO_INITDB_DATABASE: hyperativa_challenge
+    ports:
+      - "0.0.0.0:27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    command: mongod --auth
+    networks:
+      - hyperativa-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  hyperativa-network:
+    driver: bridge
