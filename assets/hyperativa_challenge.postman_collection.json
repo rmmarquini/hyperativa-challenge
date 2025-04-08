@@ -1,0 +1,162 @@
+{
+	"info": {
+		"_postman_id": "a83c50f1-4dcb-4691-a6db-7f1ddbce1aaa",
+		"name": "Hyperativa Challenge",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24489643"
+	},
+	"item": [
+		{
+			"name": "GenerateToken",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9001/api/v1/auth/token?username=rafael",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9001",
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"token"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "rafael"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Card",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"batchDescription\": \"DESAFIO-HYPERATIVA\",\r\n  \"batchDate\": \"20180524\",\r\n  \"batchNumber\": \"0001\",\r\n  \"lineIdentifier\": \"C\",\r\n  \"batchSequenceNumber\": \"2\",\r\n  \"cardNumber\": \"4456897999999999\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9001/api/v1/cards",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9001",
+					"path": [
+						"api",
+						"v1",
+						"cards"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BatchUploadCards",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/D:/Downloads/cards.txt"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:9001/api/v1/cards/upload",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9001",
+					"path": [
+						"api",
+						"v1",
+						"cards",
+						"upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Card",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9001/api/v1/cards/4456897999999999",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9001",
+					"path": [
+						"api",
+						"v1",
+						"cards",
+						"4456897999999999"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
